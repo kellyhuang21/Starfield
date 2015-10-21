@@ -1,57 +1,103 @@
-//your code here
-NormalParticle [] part;
+Particle [] parts;
+public void setup()
+{
+  size(800,800);
+  parts = new Particle[200];
+  for(int i = 0; i<parts.length; i++)
+  {
+    parts[i] = new NormalParticle();
+  }
+   parts[0] = new OddballParticle();
+   parts[1] = new JumboParticle();
+}
 
-void setup()
+public void draw()
 {
-	//your code here
-	size(800,800);
-	part = new NormalParticle[100];
-	for(int i=0; i<part.length;i++){
-		part[i] = new NormalParticle(400);
-	}
+  background(0);
+  for(int i = 0; i < parts.length; i++)
+  {
+    parts[i].move();
+    parts[i].show();
+  }
 }
-void draw()
-{
-	//your code here
-	background(0);
-	for(int i=0; i<part.length; i++){
-		part[i].move();
-		part[i].show();
-	}
 
-}
-class NormalParticle
+class NormalParticle implements Particle
 {
-	//your code here
-	double dX, dY, speed, angle;
-	NormalParticle(int x){
-		dX = x;
-		dY = height/2;
-		speed = 10;
-		angle = Math.cos(2.03);
-	}
-	void move()
-	{
-		x=angle*speed;
-		y=angle*speed;
-	}
-	void show()
-{
-	fill(255,0,0);
-	ellipse(dX,dY,30,30);
+  double dX, dY, dTheta, dSpeed;
+  int dColor;
+  NormalParticle()
+  {
+    dX = width/2;
+    dY = height/2;
+    dTheta = (Math.random()*Math.PI*2);
+    dSpeed = (Math.random()*2)+1;
+    dColor = color((int)(Math.random()*255+1),(int)(Math.random()*255+1),0);
+  }
+  public void move()
+  {
+    dX = dX + Math.cos(dTheta) * dSpeed;
+    dY = dY + Math.sin(dTheta) * dSpeed;
+    dTheta = dTheta+.015;
+  }
+  public void show()
+  {
+    fill(dColor);
+    ellipse((float)dX,(float)dY,10,10);
+  }
 }
-}	
 
 interface Particle
-{
-	//your code here
+{ 
+  public void move();	
+  public void show();
 }
-class OddballParticle //uses an interface
+
+class OddballParticle implements Particle
 {
-	//your code here
+  double myX, myY, myTheta, mySpeed;
+  int myColor;
+  OddballParticle()
+  {
+    myX = (width/2) ;
+    myY = height/2;
+    myTheta = (Math.random()*Math.PI*2);
+    mySpeed = (Math.random()*2)+1;
+    myColor = color((int)(Math.random()*255+1),0,(int)(Math.random()*255+1)); 
+  }
+  public void move()
+  {
+    //int choose=(int)(Math.random()*2);
+    myX = myX + Math.cos(myTheta) * mySpeed;
+    myY= myY + Math.sin(myTheta) * mySpeed;
+    myTheta = myTheta-.015;
+    // if(choose == 0){
+    // 	myTheta = myTheta-.015;
+    // }
+    // else if(choose == 1){
+    // 	myTheta = myTheta+.015;
+    // }
+  }
+  public void show()
+  {
+    fill(myColor);
+    ellipse((float)myX,(float)myY,50,50);
+  }
 }
-class JumboParticle //uses inheritance
+
+class JumboParticle extends NormalParticle
 {
-	//your code here
+      public void move()
+  {
+    dX = dX + Math.cos(dTheta) * dSpeed;
+    dY = dY + Math.sin(dTheta) * dSpeed;
+    dTheta = dTheta - 0.05;
+  }
+  public void show()
+  {
+    noStroke();
+    fill(dColor);
+    ellipse((float)dX,(float)dY,10,10);
+  }
+  
 }
 
